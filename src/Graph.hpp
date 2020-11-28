@@ -6,7 +6,7 @@ class Graph {
 	int numTasks;
 
 	std::vector<std::vector<double>> capacityTable;
-	std::vector<std::vector<double>> taskTable;
+	std::vector<std::vector<double>> costTable;
     
     public:
 	Graph(std::vector<Worker> workers,
@@ -14,6 +14,6 @@ class Graph {
 	      DAO dao);
 	
 	double getCapacityOf(int i, int j);
-	double getTaskOf(int i, int j);
+	double getCostOf(int i, int j);
 
 }
