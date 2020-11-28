@@ -14,7 +14,7 @@ class DAO {
 	
 	Worker getWorkerByID(int ID);
 	Task   getTaskByID(int ID);
-	double getCapacity(int tID, int wID);
-	double getTask(int tID, int wID);
+	double getCapacity(int wID, int tID);
+	double getCost(int wID, int tID);
 	
 }
