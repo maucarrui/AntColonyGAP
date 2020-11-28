@@ -1,3 +1,5 @@
+#include "Task.h"
+
 /**
  * Constructor for a task.
  * A task has an ID and a name.
