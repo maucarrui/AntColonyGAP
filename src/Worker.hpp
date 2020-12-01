@@ -10,4 +10,4 @@ class Worker {
 	
 	std::string getName();
 	double getCapacity();
-}
+};

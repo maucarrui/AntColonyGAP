@@ -10,4 +10,4 @@ class Task {
 	
         int getID();
 	std::string getName();
-}
+};
