@@ -1,4 +1,4 @@
-#include "Worker.h"
+#include "Worker.hpp"
 
 /**
  * Constructor for a worker.

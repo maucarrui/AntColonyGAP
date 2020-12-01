@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "Graph.hpp"
 
 /**
  * Constructor for a graph.
@@ -35,6 +35,6 @@ double Graph::getCapacityOf(int i, int j) {
  * @param j The task's index.
  * @return The cost of the completion of a task by a worker.
  */
-double Graph::getCapacityOf(int i, int j) {
+double Graph::getCostOf(int i, int j) {
     return 0;
 }

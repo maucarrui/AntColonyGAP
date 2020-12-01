@@ -1,4 +1,4 @@
-#include "DAO.h"
+#include "DAO.hpp"
 
 /**
  * Constructor for the DAO (Database Access Object).
@@ -28,7 +28,7 @@ void DAO::closeDB() {
  * @return The found worker.
  */
 Worker DAO::getWorkerByID(int ID) {
-    return 0;
+    return Worker("NULL", 0);
 }
 
 /**
@@ -36,8 +36,8 @@ Worker DAO::getWorkerByID(int ID) {
  * @param ID The task's ID.
  * @return The found task.
  */
-Worker DAO::getWorkerByID(int ID) {
-    return 0;
+Task DAO::getTaskByID(int ID) {
+    return Task(0, "NULL");
 }
 
 /**
