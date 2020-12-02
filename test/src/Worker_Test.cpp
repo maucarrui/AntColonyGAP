@@ -15,15 +15,24 @@ class WorkerTest : public ::testing::Test {
 	}
 };
 
+TEST_F(WorkerTest, getID) {
+    Worker worker1 = Worker(1, "NULL", 0);
+    Worker worker2 = Worker(2, "NULL", 0);
+    Worker worker3 = Worker(3, "NULL", 0);
+
+    EXPECT_EQ(1, worker1.getID());
+    EXPECT_EQ(2, worker2.getID());
+    EXPECT_EQ(3, worker3.getID());
+}
 
 TEST_F(WorkerTest, getName) {
     std::string name1 = "Steve";
     std::string name2 = "Carlos";
     std::string name3 = "Luigi";
 
-    Worker worker1 = Worker(name1, 0);
-    Worker worker2 = Worker(name2, 0);
-    Worker worker3 = Worker(name3, 0);
+    Worker worker1 = Worker(1, name1, 0);
+    Worker worker2 = Worker(2, name2, 0);
+    Worker worker3 = Worker(3, name3, 0);
 
     EXPECT_EQ(name1, worker1.getName());
     EXPECT_EQ(name2, worker2.getName());
@@ -35,9 +44,9 @@ TEST_F(WorkerTest, getCapacity) {
     int capacity2 = 0;
     int capacity3 = 10;
 
-    Worker worker1 = Worker("Steve", capacity1);
-    Worker worker2 = Worker("Steve", capacity2);
-    Worker worker3 = Worker("Steve", capacity3);
+    Worker worker1 = Worker(1, "Steve", capacity1);
+    Worker worker2 = Worker(2, "Steve", capacity2);
+    Worker worker3 = Worker(3, "Steve", capacity3);
 
     EXPECT_EQ(capacity1, worker1.getCapacity());
     EXPECT_EQ(capacity2, worker2.getCapacity());
