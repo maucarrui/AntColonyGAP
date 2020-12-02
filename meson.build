@@ -22,10 +22,19 @@ worker_test = executable('Worker test',
 	                 ['test/src/Worker_Test.cpp',
 			  'src/Worker.cpp'],
 			 dependencies : dependencies)
-test('Work tests', worker_test)
+test('Worker tests', worker_test)
 
 task_test = executable('Task test', 
-	                 ['test/src/Task_Test.cpp',
-			  'src/Task.cpp'],
-			 dependencies : dependencies)
+	               ['test/src/Task_Test.cpp',
+			'src/Task.cpp'],
+		       dependencies : dependencies)
 test('Task tests', task_test)
+
+dao_test = executable('DAO test',
+	              ['test/src/DAO_Test.cpp',
+		       'src/DAO.cpp',
+		       'src/Worker.cpp',
+		       'src/Task.cpp'],
+		      dependencies : dependencies)
+
+test('DAO tests', dao_test)
