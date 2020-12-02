@@ -21,7 +21,7 @@ class DAOTest : public ::testing::Test {
 };
 
 TEST_F(DAOTest, getWorkerByID) {
-    DAO dao = DAO("../../sql/database.db");
+    DAO dao = DAO("../sql/database.db");
     dao.openDB();
 
     Worker test1 = dao.getWorkerByID(22);
@@ -41,7 +41,7 @@ TEST_F(DAOTest, getWorkerByID) {
 }
 
 TEST_F(DAOTest, getTaskByID) {
-    DAO dao = DAO("../../sql/database.db");
+    DAO dao = DAO("../sql/database.db");
     dao.openDB();
 
     Task test1 = dao.getTaskByID(450);
@@ -51,41 +51,41 @@ TEST_F(DAOTest, getTaskByID) {
     EXPECT_EQ(test1.getID(), 450);
     EXPECT_EQ(test1.getName(), "inventar el ave");
 
-    EXPECT_EQ(test1.getID(), 150);    
+    EXPECT_EQ(test2.getID(), 150);    
     EXPECT_EQ(test2.getName(), "probar la servilleta");
 
-    EXPECT_EQ(test1.getID(), 250);
+    EXPECT_EQ(test3.getID(), 250);
     EXPECT_EQ(test3.getName(), "odiar la letra");
 
     dao.closeDB();
 }
 
 TEST_F(DAOTest, getCapacity) {
-    DAO dao = DAO("../../sql/database.db");
+    DAO dao = DAO("../sql/database.db");
     dao.openDB();
 
     double test1 = dao.getCapacity(2, 2);
     double test2 = dao.getCapacity(60, 700);
     double test3 = dao.getCapacity(240, 20);
 
-    EXPECT_EQ(test1, 59.1782397305913);
-    EXPECT_EQ(test2, 98.3664869129699);
-    EXPECT_EQ(test3, 57.3480542264592);
+    EXPECT_NEAR(test1, 59.1782397305913, 0.0010);
+    EXPECT_NEAR(test2, 98.3664869129699, 0.0010);
+    EXPECT_NEAR(test3, 57.3480542264592, 0.0010);
     
     dao.closeDB();
 }
 
 TEST_F(DAOTest, getCost) {
-    DAO dao = DAO("../../sql/database.db");
+    DAO dao = DAO("../sql/database.db");
     dao.openDB();
 
     double test1 = dao.getCost(2, 2);
     double test2 = dao.getCost(60, 700);
     double test3 = dao.getCost(240, 20);
 
-    EXPECT_EQ(test1, 102.251829952483);
-    EXPECT_EQ(test2, 41.830639735847);
-    EXPECT_EQ(test3, 105.230291998992);
+    EXPECT_NEAR(test1, 102.251829952483, 0.00010);
+    EXPECT_NEAR(test2, 41.8306397358470, 0.00010);
+    EXPECT_NEAR(test3, 105.230291998992, 0.00010);
     
     dao.closeDB();
 }
