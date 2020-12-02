@@ -1,5 +1,6 @@
 #include <sqlite3.h>
 #include <string>
+#include <iostream>
 
 #ifndef WORKER_H
 #define WORKER_H
