@@ -141,3 +141,79 @@ double DAO::getCost(int wID, int tID) {
 
     return cost;
 }
+
+/**
+ * Returns all the current workers in the database.
+ * @return A vector containing all the workers which are in the DB.
+ */
+std::vector<Worker> DAO::getWorkers() {
+    // Vector of workers.
+    std::vector<Worker> workers;
+  
+    // Worker's attributes.
+    int ID;
+    std::string name;
+    double capacity;
+
+    // SQL query;
+    std::string query;
+    query = "SELECT * FROM trabajadores";
+
+    const char* c_query = query.c_str();
+
+    // Execute the query.
+    sqlite3_stmt * stmt;
+    sqlite3_prepare(DB, c_query, -1, &stmt, NULL);
+
+    sqlite3_step(stmt);
+
+    while (sqlite3_column_int(stmt, 0)) {
+        ID       = sqlite3_column_int(stmt, 0);
+        name     = std::string( (char *) sqlite3_column_text(stmt, 1) );
+	capacity = sqlite3_column_double(stmt, 2);
+	
+	Worker w = Worker(ID, name, capacity);
+	workers.push_back(w);
+
+	sqlite3_step(stmt);
+    }
+
+    return workers;
+}
+
+/**
+ * Returns all the current tasks in the database.
+ * @return A vector containing all the tasks which are in the DB.
+ */
+std::vector<Task> DAO::getTasks() {
+    // Vector of tasks.
+    std::vector<Task> tasks;
+  
+    // Task's attributes.
+    int ID;
+    std::string name;
+
+    // SQL query;
+    std::string query;
+    query = "SELECT * FROM tareas";
+
+    const char* c_query = query.c_str();
+
+    // Execute the query.
+    sqlite3_stmt * stmt;
+    sqlite3_prepare(DB, c_query, -1, &stmt, NULL);
+
+    sqlite3_step(stmt);
+
+    while (sqlite3_column_int(stmt, 0)) {
+        ID       = sqlite3_column_int(stmt, 0);
+        name     = std::string( (char *) sqlite3_column_text(stmt, 1) );
+	
+	Task t = Task(ID, name);
+	tasks.push_back(t);
+	
+	sqlite3_step(stmt);
+    }
+
+    return tasks;
+}

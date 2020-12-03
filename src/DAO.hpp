@@ -1,5 +1,6 @@
 #include <sqlite3.h>
 #include <string>
+#include <vector>
 #include <iostream>
 
 #ifndef WORKER_H
@@ -26,5 +27,8 @@ class DAO {
 	Worker getWorkerByID(int ID);
 	Task   getTaskByID(int ID);
 	double getCapacity(int wID, int tID);
-	double getCost(int wID, int tID);	
+	double getCost(int wID, int tID);
+
+        std::vector<Worker> getWorkers();
+        std::vector<Task>   getTasks();
 };

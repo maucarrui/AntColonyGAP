@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include <string>
+#include <vector>
 
 #ifndef DAO_H
 #define DAO_H
@@ -88,6 +89,26 @@ TEST_F(DAOTest, getCost) {
     EXPECT_NEAR(test3, 105.230291998992, 0.00010);
     
     dao.closeDB();
+}
+
+TEST_F(DAOTest, getWorkers) {
+    DAO dao = DAO("../sql/database.db");
+    dao.openDB();
+
+    std::vector<Worker> workers = dao.getWorkers();
+    
+    EXPECT_EQ(500, workers.size());
+
+    dao.closeDB();
+}
+
+TEST_F(DAOTest, getTasks) {
+    DAO dao = DAO("../sql/database.db");
+    dao.openDB();
+
+    std::vector<Task> tasks = dao.getTasks();
+    
+    EXPECT_EQ(1000, tasks.size());
 }
 
 int main(int argc, char **argv) {
