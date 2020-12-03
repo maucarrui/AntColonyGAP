@@ -13,10 +13,42 @@
  * @param tasks   The set of tasks.
  * @param DAO     The database access object.
  */
-Graph::Graph(std::vector<Worker> workers,
-	     std::vector<Task> tasks,
-	     DAO dao) {
-    return;
+Graph::Graph(const std::vector<Worker> &workers,
+	     const std::vector<Task>   &tasks,
+	     const DAO &dao) {
+    this->workers = workers;
+    this->tasks   = tasks;
+    this->dao     = dao;
+
+    this->numWorkers = workers.size();
+    this->numTasks   = tasks.size();
+
+    this->capacityTable.resize(numWorkers, std::vector<double>(numTasks));
+    this->costTable.resize(numWorkers, std::vector<double>(numTasks));
+}
+
+/**
+ * Returns the amount of workers the graph has.
+ * @return The amount of workers the graph has.
+ */
+int Graph::getNumWorkers() {
+    return this->workers.size();
+}
+
+/**
+ * Returns the amount of tasks the graph has.
+ * @return The amount of tasks the graph has.
+ */
+int Graph::getNumTasks() {
+    return this->tasks.size();
+}
+
+/**
+ * Returns the amount of edges the graph has.
+ * @return The amount of edges the graph has.
+ */
+int Graph::getNumEdges() {
+    return capacityTable.size() * capacityTable[0].size();
 }
 
 /**

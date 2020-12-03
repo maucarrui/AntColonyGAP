@@ -1,6 +1,11 @@
 #include "DAO.hpp"
 
 /**
+ * Default constructor.
+ */
+DAO::DAO() {}
+
+/**
  * Constructor for the DAO (Database Access Object).
  */
 DAO::DAO(std::string location) {

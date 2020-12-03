@@ -20,13 +20,22 @@ class Graph {
         int numWorkers;
 	int numTasks;
 
+        std::vector<Worker> workers;
+        std::vector<Task>   tasks;
+
+        DAO dao;
+
 	std::vector<std::vector<double>> capacityTable;
 	std::vector<std::vector<double>> costTable;
     
     public:
-	Graph(std::vector<Worker> workers,
-	      std::vector<Task> tasks,
-	      DAO dao);
+	Graph(const std::vector<Worker> &workers,
+	      const std::vector<Task>   &tasks,
+	      const DAO &dao);
+
+        int getNumWorkers();
+        int getNumTasks();
+        int getNumEdges();
 	
 	double getCapacityOf(int i, int j);
 	double getCostOf(int i, int j);

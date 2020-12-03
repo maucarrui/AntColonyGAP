@@ -19,6 +19,7 @@ class DAO {
 	std::string location;
 
     public:
+        DAO();
 	DAO(std::string location);
 
 	int  openDB();
