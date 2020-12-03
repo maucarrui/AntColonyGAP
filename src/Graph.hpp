@@ -20,10 +20,10 @@ class Graph {
         int numWorkers;
 	int numTasks;
 
-        std::vector<Worker> workers;
-        std::vector<Task>   tasks;
+        const std::vector<Worker>& workers;
+        const std::vector<Task>&   tasks;
 
-        DAO dao;
+        const DAO& dao;
 
 	std::vector<std::vector<double>> capacityTable;
 	std::vector<std::vector<double>> costTable;

@@ -15,11 +15,10 @@
  */
 Graph::Graph(const std::vector<Worker> &workers,
 	     const std::vector<Task>   &tasks,
-	     const DAO &dao) {
-    this->workers = workers;
-    this->tasks   = tasks;
-    this->dao     = dao;
-
+	     const DAO &dao):
+    workers(workers),
+    tasks(tasks),
+    dao(dao) {
     this->numWorkers = workers.size();
     this->numTasks   = tasks.size();
 
