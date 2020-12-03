@@ -22,13 +22,11 @@ worker_test = executable('Worker test',
 	                 ['test/src/Worker_Test.cpp',
 			  'src/Worker.cpp'],
 			 dependencies : dependencies)
-test('Worker tests', worker_test)
 
 task_test = executable('Task test', 
 	               ['test/src/Task_Test.cpp',
 			'src/Task.cpp'],
 		       dependencies : dependencies)
-test('Task tests', task_test)
 
 dao_test = executable('DAO test',
 	              ['test/src/DAO_Test.cpp',
@@ -37,4 +35,18 @@ dao_test = executable('DAO test',
 		       'src/Task.cpp'],
 		      dependencies : dependencies)
 
+graph_test = executable('Graph test',
+	                ['test/src/Graph_Test.cpp',
+			 'src/Graph.cpp',
+			 'src/Worker.cpp',
+			 'src/Task.cpp',
+			 'src/DAO.cpp'],
+			dependencies : dependencies)
+
+test('Worker tests', worker_test)
+
+test('Task tests', task_test)
+
 test('DAO tests', dao_test)
+
+test('Graph tests', graph_test)
