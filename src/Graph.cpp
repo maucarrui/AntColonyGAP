@@ -24,6 +24,9 @@ Graph::Graph(const std::vector<Worker> &workers,
 
     this->capacityTable.resize(numWorkers, std::vector<double>(numTasks));
     this->costTable.resize(numWorkers, std::vector<double>(numTasks));
+
+    buildCapacityTable();
+    buildCostTable();
 }
 
 /**
@@ -51,13 +54,47 @@ int Graph::getNumEdges() {
 }
 
 /**
+ * Builds the capacity table.
+ */
+void Graph::buildCapacityTable() {
+    std::vector<std::pair<std::pair<int, int>, double>> capacities;
+    capacities = dao.getCapacities();
+    
+    int tID, wID, k;
+    int totalEdges = numWorkers * numTasks;
+
+    for (k = 0; k < totalEdges; k++) {
+        tID = capacities[k].first.first - 1;
+	wID = capacities[k].first.second - 1;
+	capacityTable[wID][tID] = capacities[k].second;
+    }
+}
+
+/**
+ * Builds the cost table.
+ */
+void Graph::buildCostTable() {
+    std::vector<std::pair<std::pair<int, int>, double>> costs;
+    costs = dao.getCosts();
+    
+    int tID, wID, k;
+    int totalEdges = numWorkers * numTasks;
+
+    for (k = 0; k < totalEdges; k++) {
+        tID = costs[k].first.first - 1;
+	wID = costs[k].first.second - 1;
+	costTable[wID][tID] = costs[k].second;
+    }
+}
+
+/**
  * Returns the worker's capacity of doing a task.
  * @param i The worker's index.
  * @param j The task's index.
  * @return The worker's capacity of doing a task.
  */
 double Graph::getCapacityOf(int i, int j) {
-    return 0;
+    return capacityTable[i-1][j-1];
 }
 
 /**
@@ -67,5 +104,5 @@ double Graph::getCapacityOf(int i, int j) {
  * @return The cost of the completion of a task by a worker.
  */
 double Graph::getCostOf(int i, int j) {
-    return 0;
+    return costTable[i-1][j-1];
 }

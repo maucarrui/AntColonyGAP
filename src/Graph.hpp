@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #ifndef WORKER_H
@@ -27,6 +28,9 @@ class Graph {
 
 	std::vector<std::vector<double>> capacityTable;
 	std::vector<std::vector<double>> costTable;
+
+        void buildCapacityTable();
+        void buildCostTable();
     
     public:
 	Graph(const std::vector<Worker> &workers,
