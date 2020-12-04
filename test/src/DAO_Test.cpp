@@ -109,6 +109,26 @@ TEST_F(DAOTest, getTasks) {
     std::vector<Task> tasks = dao.getTasks();
     
     EXPECT_EQ(1000, tasks.size());
+
+    dao.closeDB();
+}
+
+TEST_F(DAOTest, getCapacities) {
+    DAO dao = DAO("../sql/database.db");
+    dao.openDB();
+
+    EXPECT_EQ(500000, dao.getCapacities().size());
+    
+    dao.closeDB();
+}
+
+TEST_F(DAOTest, getCosts) {
+    DAO dao = DAO("../sql/database.db");
+    dao.openDB();
+
+    EXPECT_EQ(500000, dao.getCosts().size());
+    
+    dao.closeDB();
 }
 
 int main(int argc, char **argv) {

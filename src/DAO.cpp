@@ -42,7 +42,7 @@ void DAO::closeDB() {
  * @param ID The worker's ID.
  * @return The found worker.
  */
-Worker DAO::getWorkerByID(int ID) {
+Worker DAO::getWorkerByID(int ID) const {
     // Worker's attributes.
     std::string name;
     double capacity;
@@ -71,7 +71,7 @@ Worker DAO::getWorkerByID(int ID) {
  * @param ID The task's ID.
  * @return The found task.
  */
-Task DAO::getTaskByID(int ID) {
+Task DAO::getTaskByID(int ID) const {
     // Task's attributes.
     std::string name;
 
@@ -99,7 +99,7 @@ Task DAO::getTaskByID(int ID) {
  * @param  tID The task's ID.
  * @return The worker's capacity of doing a task.
  */
-double DAO::getCapacity(int wID, int tID) {
+double DAO::getCapacity(int wID, int tID) const {
     // SQL query;
     std::string query;
     query  = "SELECT * FROM capacidades WHERE id_tarea = ";
@@ -126,7 +126,7 @@ double DAO::getCapacity(int wID, int tID) {
  * @param  tID The task's ID.
  * @return The cost of the completion of a task by a worker.
  */
-double DAO::getCost(int wID, int tID) {
+double DAO::getCost(int wID, int tID) const {
     // SQL query;
     std::string query;
     query  = "SELECT * FROM costos WHERE id_tarea = ";
@@ -151,7 +151,7 @@ double DAO::getCost(int wID, int tID) {
  * Returns all the current workers in the database.
  * @return A vector containing all the workers which are in the DB.
  */
-std::vector<Worker> DAO::getWorkers() {
+std::vector<Worker> DAO::getWorkers() const {
     // Vector of workers.
     std::vector<Worker> workers;
   
@@ -190,7 +190,7 @@ std::vector<Worker> DAO::getWorkers() {
  * Returns all the current tasks in the database.
  * @return A vector containing all the tasks which are in the DB.
  */
-std::vector<Task> DAO::getTasks() {
+std::vector<Task> DAO::getTasks() const {
     // Vector of tasks.
     std::vector<Task> tasks;
   
@@ -221,4 +221,86 @@ std::vector<Task> DAO::getTasks() {
     }
 
     return tasks;
+}
+
+/** 
+ * Returns all the current capacities in the database.
+ * @return A vector containing all the current capacities.
+ */
+std::vector<std::pair<std::pair<int, int>, double>> DAO::getCapacities() const {
+    int i, j;
+    double c;
+
+    std::vector<std::pair<std::pair<int, int>, double>> capacities;
+
+    std::pair<std::pair<int, int>, double> p;
+    std::pair<int, int> t;
+
+    // SQL query;
+    std::string query;
+    query = "SELECT * FROM capacidades";
+
+    const char* c_query = query.c_str();
+
+    // Execute the query.
+    sqlite3_stmt * stmt;
+    sqlite3_prepare(DB, c_query, -1, &stmt, NULL);
+
+    sqlite3_step(stmt);
+
+    while (sqlite3_column_int(stmt, 0)) {
+        i = sqlite3_column_int(stmt, 0);
+        j = sqlite3_column_int(stmt, 1);
+        c = sqlite3_column_double(stmt, 2);
+
+        t = std::make_pair(i, j);
+	p = std::make_pair(t, c);
+
+	capacities.push_back(p);
+	
+	sqlite3_step(stmt);
+    }
+
+    return capacities;
+}
+
+/** 
+ * Returns all the current costs in the database.
+ * @return A vector containing all the current costs.
+ */
+std::vector<std::pair<std::pair<int, int>, double>> DAO::getCosts() const {
+    int i, j;
+    double c;
+
+    std::vector<std::pair<std::pair<int, int>, double>> costs;
+
+    std::pair<std::pair<int, int>, double> p;
+    std::pair<int, int> t;
+
+    // SQL query;
+    std::string query;
+    query = "SELECT * FROM costos";
+
+    const char* c_query = query.c_str();
+
+    // Execute the query.
+    sqlite3_stmt * stmt;
+    sqlite3_prepare(DB, c_query, -1, &stmt, NULL);
+
+    sqlite3_step(stmt);
+
+    while (sqlite3_column_int(stmt, 0)) {
+        i = sqlite3_column_int(stmt, 0);
+        j = sqlite3_column_int(stmt, 1);
+        c = sqlite3_column_double(stmt, 2);
+
+        t = std::make_pair(i, j);
+	p = std::make_pair(t, c);
+
+	costs.push_back(p);
+	
+	sqlite3_step(stmt);
+    }
+
+    return costs;
 }

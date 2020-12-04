@@ -25,11 +25,14 @@ class DAO {
 	int  openDB();
 	void closeDB();
 	
-	Worker getWorkerByID(int ID);
-	Task   getTaskByID(int ID);
-	double getCapacity(int wID, int tID);
-	double getCost(int wID, int tID);
+	Worker getWorkerByID(int ID) const;
+	Task   getTaskByID(int ID) const;
+	double getCapacity(int wID, int tID) const;
+	double getCost(int wID, int tID) const;
 
-        std::vector<Worker> getWorkers();
-        std::vector<Task>   getTasks();
+        std::vector<Worker> getWorkers() const;
+        std::vector<Task>   getTasks() const;
+
+        std::vector<std::pair<std::pair<int, int>, double>> getCapacities() const;
+        std::vector<std::pair<std::pair<int, int>, double>> getCosts() const;
 };
