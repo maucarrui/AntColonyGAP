@@ -1,4 +1,5 @@
 #include <vector>
+#include <random>
 
 class Solution {
     private:
@@ -12,7 +13,7 @@ class Solution {
 
         double  getCapacity();
         double  getCost();
-        bool    getFeasibilty();
+        bool    getFeasibility();
 
         void setCapacity(double newCapacity);
         void setCost(double newCost);

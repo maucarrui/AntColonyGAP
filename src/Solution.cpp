@@ -1,6 +1,5 @@
 #include "Solution.hpp"
 
-
 /**
  * Constructor for a solution.
  * A solution consists in the edges of the 
@@ -62,7 +61,7 @@ void Solution::setCost(double newCost) {
  * a random task and assigning another worker to 
  * it.
  */
-std::vector<std::pair<int, int>> getRandomNeighbor() {
+std::vector<std::pair<int, int>> Solution::getRandomNeighbor() {
     int newWorker, oldWorker;
     int numTasks = edges.size();
     
@@ -71,7 +70,7 @@ std::vector<std::pair<int, int>> getRandomNeighbor() {
 
     oldWorker = newWorker = edges[randTask].first;
 
-    while (oldWorker = newWorker)
+    while (oldWorker == newWorker)
         newWorker = rand() % 500 + 1;
 
     // Create the neighbor
