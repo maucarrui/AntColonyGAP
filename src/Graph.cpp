@@ -89,8 +89,8 @@ void Graph::buildCostTable() {
 
 /**
  * Returns the worker's capacity of doing a task.
- * @param i The worker's index.
- * @param j The task's index.
+ * @param i The worker's ID.
+ * @param j The task's ID.
  * @return The worker's capacity of doing a task.
  */
 double Graph::getCapacityOf(int i, int j) {
@@ -99,10 +99,85 @@ double Graph::getCapacityOf(int i, int j) {
 
 /**
  * Returns the cost of the completion of a task by a worker.
- * @param i The worker's index.
- * @param j The task's index.
+ * @param i The worker's ID.
+ * @param j The task's ID.
  * @return The cost of the completion of a task by a worker.
  */
 double Graph::getCostOf(int i, int j) {
     return costTable[i-1][j-1];
+}
+
+/**
+ * Calculates the capacity of a set of edges.
+ * @return The capacity of the set of edges.
+ */
+double Graph::calculateCapacity(std::vector<std::pair<int, int>> edges) {
+    int numEdges = edges.size();
+    int i, wID, tID;
+    double total = 0;
+
+    for (i = 0; i < numEdges; i++) {
+        wID = edges[i].first;
+	tID = edges[i].second;
+	
+	total += getCapacityOf(wID, tID);
+    }
+
+    return total;
+}
+
+/**
+ * Calculates the cost of a set of edges.
+ * @return The cost of the set of edges.
+ */
+double Graph::calculateCost(std::vector<std::pair<int, int>> edges) {
+    int numEdges = edges.size();
+    int i, wID, tID;
+    double total = 0;
+
+    for (i = 0; i < numEdges; i++) {
+        wID = edges[i].first;
+	tID = edges[i].second;
+	
+	total += getCostOf(wID, tID);
+    }
+
+    return total;
+}
+
+/**
+ * Returns an initial solution given the current set 
+ * of workers and tasks.
+ * @return An initial solution.
+ */
+Solution Graph::getInitialSolution() {
+    std::vector<std::pair<int, int>> edges;
+    int i, r, wID, tID;
+
+    for (i = 0; i < numTasks; i++) {
+        // Select a task.
+        Task t = tasks[i];
+	
+	// Select a random worker;
+	r = rand() % numWorkers;
+	Worker w = workers[r];
+	
+	// Assign the worker to the task.
+	wID = w.getID();
+	tID = t.getID();
+
+	edges.push_back(std::make_pair(wID, tID));
+    }
+
+    // Create a solution
+    Solution s = Solution(edges);
+
+    // Calculate its capacity and cost.
+    double capacity = calculateCapacity(edges);
+    double cost     = calculateCost(edges);
+
+    s.setCapacity(capacity);
+    s.setCost(cost);
+
+    return s;
 }

@@ -9,6 +9,7 @@ src = ['src/Task.cpp',
        'src/Worker.cpp',
        'src/DAO.cpp',
        'src/Graph.cpp',
+       'src/Solution.cpp',
        'src/main.cpp']
 
 incdir = include_directories('src')
@@ -40,7 +41,8 @@ graph_test = executable('Graph test',
 			 'src/Graph.cpp',
 			 'src/Worker.cpp',
 			 'src/Task.cpp',
-			 'src/DAO.cpp'],
+			 'src/DAO.cpp',
+			 'src/Solution.cpp'],
 			dependencies : dependencies)
 
 test('Worker tests', worker_test)

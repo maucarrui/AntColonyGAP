@@ -21,6 +21,11 @@
 #include "../../src/Task.hpp"
 #endif
 
+#ifndef SOLUTION_H
+#define SOLUTION_H
+#include "../../src/Solution.hpp"
+#endif
+
 class GRAPHTest : public ::testing::Test {
     protected:
         virtual void SetUp() {

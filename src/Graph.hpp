@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <random>
 
 #ifndef WORKER_H
 #define WORKER_H
@@ -14,6 +15,11 @@
 #ifndef DAO_H
 #define DAO_H
 #include "DAO.hpp"
+#endif
+
+#ifndef SOLUTION_H
+#define SOLUTION_H
+#include "Solution.hpp"
 #endif
 
 class Graph {
@@ -44,4 +50,8 @@ class Graph {
 	double getCapacityOf(int i, int j);
 	double getCostOf(int i, int j);
 
+        double calculateCapacity(std::vector<std::pair<int, int>> edges);
+        double calculateCost(std::vector<std::pair<int, int>> edges);
+
+        Solution getInitialSolution();
 };
