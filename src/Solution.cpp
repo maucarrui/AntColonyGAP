@@ -53,30 +53,3 @@ void Solution::setCapacity(double newCapacity) {
 void Solution::setCost(double newCost) {
     this->cost = newCost;
 }
-
-/**
- * Returns a set of edges corresponding to a
- * new solution.
- * A new solution is generated selecting a 
- * a random task and assigning another worker to 
- * it.
- */
-std::vector<std::pair<int, int>> Solution::getRandomNeighbor() {
-    int newWorker, oldWorker;
-    int numTasks = edges.size();
-    
-    // Select random task.
-    int randTask = rand() % numTasks;
-
-    oldWorker = newWorker = edges[randTask].first;
-
-    while (oldWorker == newWorker)
-        newWorker = rand() % 500 + 1;
-
-    // Create the neighbor
-    std::vector<std::pair<int, int>> neighbor;
-    neighbor = edges;
-    neighbor[randTask].first = newWorker;
-
-    return neighbor;
-}

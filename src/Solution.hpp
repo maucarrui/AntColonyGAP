@@ -17,6 +17,4 @@ class Solution {
 
         void setCapacity(double newCapacity);
         void setCost(double newCost);
-
-        std::vector<std::pair<int, int>> getRandomNeighbor();
 };
