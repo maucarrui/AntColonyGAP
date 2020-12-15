@@ -7,6 +7,7 @@ class Worker {
 	double capacity;
 
     public:
+        Worker();
 	Worker(int ID, std::string name, double capacity);
 	
         int getID();

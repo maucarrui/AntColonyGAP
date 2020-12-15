@@ -1,6 +1,11 @@
 #include "Worker.hpp"
 
 /**
+ * Default constructor.
+ */
+Worker::Worker() {}
+
+/**
  * Constructor for a worker.
  * A worker has a name and its capacity to complete
  * tasks.
