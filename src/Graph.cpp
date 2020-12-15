@@ -103,7 +103,7 @@ void Graph::buildCostTable() {
  * @param j The task's ID.
  * @return The worker's capacity of doing a task.
  */
-double Graph::getCapacityOf(int i, int j) {
+double Graph::getCapacityOf(int i, int j) const {
     return capacityTable[i-1][j-1];
 }
 
@@ -113,7 +113,7 @@ double Graph::getCapacityOf(int i, int j) {
  * @param j The task's ID.
  * @return The cost of the completion of a task by a worker.
  */
-double Graph::getCostOf(int i, int j) {
+double Graph::getCostOf(int i, int j) const {
     return costTable[i-1][j-1];
 }
 
@@ -122,14 +122,17 @@ double Graph::getCostOf(int i, int j) {
  * @param wID The worker's ID.
  * @return The worker's capacity.
  */
-double Graph::getCapacityOfWorker(int wID) {
-    return searchTableWorkers[wID].getCapacity();
+double Graph::getCapacityOfWorker(int wID) const {
+    std::unordered_map<int, Worker>::const_iterator it;
+    it = searchTableWorkers.find(wID);
+
+    return it->second.getCapacity();
 }
 /**
  * Calculates the capacity of a set of edges.
  * @return The capacity of the set of edges.
  */
-double Graph::calculateCapacity(std::vector<std::pair<int, int>> edges) {
+double Graph::calculateCapacity(std::vector<std::pair<int, int>> edges) const {
     int numEdges = edges.size();
     int i, wID, tID;
     double total = 0;
@@ -148,7 +151,7 @@ double Graph::calculateCapacity(std::vector<std::pair<int, int>> edges) {
  * Calculates the cost of a set of edges.
  * @return The cost of the set of edges.
  */
-double Graph::calculateCost(std::vector<std::pair<int, int>> edges) {
+double Graph::calculateCost(std::vector<std::pair<int, int>> edges) const {
     int numEdges = edges.size();
     int i, wID, tID;
     double total = 0;

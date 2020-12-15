@@ -51,13 +51,13 @@ class Graph {
         int getNumTasks() const;
         int getNumEdges();
 	
-	double getCapacityOf(int i, int j);
-	double getCostOf(int i, int j);
+	double getCapacityOf(int i, int j) const;
+	double getCostOf(int i, int j) const;
 
-        double getCapacityOfWorker(int wID);
+        double getCapacityOfWorker(int wID) const;
 
-        double calculateCapacity(std::vector<std::pair<int, int>> edges);
-        double calculateCost(std::vector<std::pair<int, int>> edges);
+        double calculateCapacity(std::vector<std::pair<int, int>> edges) const;
+        double calculateCost(std::vector<std::pair<int, int>> edges) const;
 
         Solution getInitialSolution();
 };
