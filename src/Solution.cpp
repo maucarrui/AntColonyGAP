@@ -1,6 +1,11 @@
 #include "Solution.hpp"
 
 /**
+ * Default constructor.
+ */
+Solution::Solution() {}
+
+/**
  * Constructor for a solution.
  * A solution consists in the edges of the 
  * bipartite graph, its cost, its capacity and 

@@ -9,6 +9,7 @@ class Solution {
         bool isFeasible;
 
     public:
+        Solution();
         Solution(std::vector<std::pair<int, int>> edges);
 
         std::vector<std::pair<int, int>> getEdges();
