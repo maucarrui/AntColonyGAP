@@ -8,7 +8,7 @@ class HeuristicGraph {
         std::vector<std::vector<double>> bipartite;
         std::vector<double> accumulatedPheromones;
 
-        void setIntialPheromones();
+        void setInitialPheromones();
 
     public:
         HeuristicGraph(int numWorkers, int numTasks);
