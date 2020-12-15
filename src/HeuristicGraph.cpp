@@ -44,7 +44,7 @@ void HeuristicGraph::setInitialPheromones() {
  * @param tID The task's ID.
  * @return The pheromone value of the edge (i, j) in the bipartite graph.
  */
-double HeuristicGraph::getPheromone(int wID, int tID) {
+double HeuristicGraph::getPheromone(int wID, int tID) const {
     return this->bipartite[wID][tID];
 }
 
@@ -53,7 +53,7 @@ double HeuristicGraph::getPheromone(int wID, int tID) {
  * @param  The task's ID.
  * @return The accumulated amount of pheromones in a task.
  */
-double HeuristicGraph::getAccumulated(int tID) {
+double HeuristicGraph::getAccumulated(int tID) const {
     return this->accumulatedPheromones[tID];
 }
 
@@ -63,14 +63,14 @@ double HeuristicGraph::getAccumulated(int tID) {
  * @param j         The task's ID.
  * @param pheromone The new pheromone value.
  */
-void HeuristicGraph::setPheromone(int i, int j, double pheromone) {
+void HeuristicGraph::setPheromone(int i, int j, double pheromone) const {
     this->bipartite[i][j] = pheromone;
 }
 
 /**
  * Updates the amount of accumulated pheromones for each task.
  */
-void HeuristicGraph::updateAccumulated() {
+void HeuristicGraph::updateAccumulated() const {
     int i, j;
     double total;
 
