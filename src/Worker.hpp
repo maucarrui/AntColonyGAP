@@ -10,7 +10,7 @@ class Worker {
         Worker();
 	Worker(int ID, std::string name, double capacity);
 	
-        int getID();
-	std::string getName();
-	double getCapacity();
+        int getID() const;
+	std::string getName() const;
+	double getCapacity() const;
 };

@@ -24,7 +24,7 @@ Worker::Worker(int ID, std::string name, double capacity) {
  * Returns the worker's ID.
  * @return The worker's ID.
  */
-int  Worker::getID() {
+int  Worker::getID() const {
     return this->ID;
 }
 
@@ -33,7 +33,7 @@ int  Worker::getID() {
  * Returns the worker's name.
  * @return The worker's name.
  */
-std::string Worker::getName() {
+std::string Worker::getName() const {
     return this->name;
 }
 
@@ -41,6 +41,6 @@ std::string Worker::getName() {
  * Returns the worker's capacity.
  * @return The worker's capacity.
  */
-double Worker::getCapacity() {
+double Worker::getCapacity() const {
     return this->capacity;
 }
