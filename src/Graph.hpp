@@ -36,7 +36,7 @@ class Graph {
 	std::vector<std::vector<double>> capacityTable;
 	std::vector<std::vector<double>> costTable;
 
-        std::unordered_map<Worker> searchTableWorkers;
+        std::unordered_map<int, Worker> searchTableWorkers;
 
         void buildSearchTable();
         void buildCapacityTable();

@@ -57,7 +57,7 @@ int Graph::getNumEdges() {
  * Builds the search table of workers.
  */
 void Graph::buildSearchTable() {
-    for (int i = 0; i < numWokers; i++) {
+    for (int i = 0; i < numWorkers; i++) {
         Worker w = workers[i];
 	searchTableWorkers[w.getID()] = w;
     }
