@@ -12,9 +12,8 @@ HueristicGraph::HeuristicGraph(int numWorkers, int numTasks) {
     this->numWorkers = numWorkers;
     this->numTasks   = numTasks;
 
-    this->bipartite.resize(numWorkers, 
-			   std::vector<std::pair<double, double>>(numTasks));
-    this->clan.resize(numWorkers, std::vector<double>(numWorkers));
+    this->bipartite.resize(numWorkers, std::vector<double>(numWorkers));
+    this->accumulatedPheromones.resize(numTasks);
 
     setInitialPheromones();
 }
@@ -26,42 +25,18 @@ HueristicGraph::HeuristicGraph(int numWorkers, int numTasks) {
  */
 void HeuristicGraph::setInitialPheromones() {
     int i, j, totalEdges;
-    double probabilty;
-
-    // For each edge adjecent to a worker.
-    for (i = 0; i < numWorkers; i++) {
-        totalEdges  = (numWorkers - 1) + numTasks;
-	probability = 1 / totalEdges;
-
-	// Clan
-	for (j = i + 1; j < numWorkers; j++) {
-	    clan[i][j] = probability;
-	    clan[j][i] = probability;
-	}
-	
-	// Bipartite
-	for (j = 0; j < numTasks; j++)
-	    bipartite[i][j].first = probability;
-    }
+    double pheromone;
 
     // For each edge adjecent to a Task.
     for (i = 0; i < numTasks; i++) {
         totalEdges = numWorkers;
-	probability = 1 / totalEdges;
+	pheromone = 1;
 	
 	for (j = 0; j < numWorkers; j++)
-	    bipartite[j][i].second = probability;
-    }
-}
+	    bipartite[j][i] = pheromone;
 
-/**
- * Returns the pheromone value of the edge (i, j) in the clan.
- * @param i The worker's ID.
- * @param j The worker's ID.
- * @return The pheromone value of the edge (i, j) in the clan.
- */
-double HueristicGraph::getPheromoneClan(int i, int j) {
-    return this->clan[i][j];
+	accumulatedPheromones[i] = numWorkers;
+    }
 }
 
 /**
@@ -70,18 +45,17 @@ double HueristicGraph::getPheromoneClan(int i, int j) {
  * @param tID The task's ID.
  * @return The pheromone value of the edge (i, j) in the bipartite graph.
  */
-double HeuristicGraph::getPheromoneBipartite(int wID, int tID) {
+double HeuristicGraph::getPheromone(int wID, int tID) {
     return this->bipartite[i][j];
 }
 
 /**
- * Set the pheromone value of the edge (i, j) in the clan.
- * @param i         The worker's ID.
- * @param j         The worker's ID.
- * @param pheromone The new pheromone value.
+ * Returns the accumulated amount of pheromones in a task.
+ * @param  The task's ID.
+ * @return The accumulated amount of pheromones in a task.
  */
-void HeuristicGraph::setPheromoneClan(int i, int j, double pheromone) {
-    this->clan[i][j] = pheromone;
+double HueristicGraph::getAccumulated(int tID) {
+    return this->accumulated[tID];
 }
 
 /**
@@ -90,6 +64,23 @@ void HeuristicGraph::setPheromoneClan(int i, int j, double pheromone) {
  * @param j         The task's ID.
  * @param pheromone The new pheromone value.
  */
-void HeuristicGraph::setPheromoneBipartite(int i, int j, double pheromone) {
+void HeuristicGraph::setPheromone(int i, int j, double pheromone) {
     this->bipartite[i][j] = pheromone;
+}
+
+/**
+ * Updates the amount of accumulated pheromones for each task.
+ */
+void updateAccumulated() {
+    int i, j;
+    double total;
+
+    for (i = 0; i < numTasks; i++) {
+        total = 0;
+
+	for (j = 0; j < numWorkers; j++)
+	    total += bipartite[j][i];
+	
+	accumulatedPheromones[i] = total;
+    }
 }

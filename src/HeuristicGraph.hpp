@@ -5,17 +5,17 @@ class HeuristicGraph {
         int numWorkers;
         int numTasks;
 
-        std::vector<std::vector<std::pair<double, double>>> bipartite;
-        std::vector<std::vector<double>> clan;
+        std::vector<std::vector<double>> bipartite;
+        std::vector<double> accumulatedPheromones;
 
         void setIntialPheromones();
 
     public:
         HeuristicGraph(int numWorkers, int numTasks);
 
-        double getPheromoneClan(int i, int j);
-        double getPheromoneBipartite(int wID, int tID);
+        double getPheromone(int wID, int tID);
+        double getAccumulated(int tID);
 
-        void setPheromoneClan(int i, int j, double pheromone);
-        void setPheromoneBipartite(int wID, int tID, double pheromone);
-}
+        void setPheromone(int wID, int tID, double pheromone);
+        void updateAccumulated();
+};
