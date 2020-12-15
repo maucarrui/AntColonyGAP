@@ -18,13 +18,13 @@ void Ant::addEdge(std::pair<int, int> edge) {
  * solution.
  */
 void Ant::sendToColony() {
-    travalledEdges.clear();
+    travelledEdges.clear();
 }
 
 /**
  * Returns the solution found by the ant.
  * @return The solution found by the ant.
  */
-Solution getSolution() {
+Solution Ant::getSolution() {
     return Solution(travelledEdges);
 }

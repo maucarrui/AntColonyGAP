@@ -5,7 +5,7 @@
 
 class Ant {
     private:
-        std::vector<std::pair<std::pair<int, int>>> travelledEdges;
+        std::vector<std::pair<int, int>> travelledEdges;
 
     public:
         Ant();
