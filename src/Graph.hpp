@@ -47,8 +47,8 @@ class Graph {
 	      const std::vector<Task>   &tasks,
 	      const DAO &dao);
 
-        int getNumWorkers();
-        int getNumTasks();
+        int getNumWorkers() const;
+        int getNumTasks() const;
         int getNumEdges();
 	
 	double getCapacityOf(int i, int j);

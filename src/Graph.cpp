@@ -33,7 +33,7 @@ Graph::Graph(const std::vector<Worker> &workers,
  * Returns the amount of workers the graph has.
  * @return The amount of workers the graph has.
  */
-int Graph::getNumWorkers() {
+int Graph::getNumWorkers() const {
     return this->workers.size();
 }
 
@@ -41,7 +41,7 @@ int Graph::getNumWorkers() {
  * Returns the amount of tasks the graph has.
  * @return The amount of tasks the graph has.
  */
-int Graph::getNumTasks() {
+int Graph::getNumTasks() const {
     return this->tasks.size();
 }
 
