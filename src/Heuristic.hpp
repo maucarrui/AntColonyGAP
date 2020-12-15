@@ -24,9 +24,10 @@
 class Heuristic {
     private:
         const Graph &G;
-        const HeuristicaGraph &H;
+        const HeuristicGraph &H;
 
         int numAnts;
+        int maxTries;
         double Q;
         double evaporation;
         double epsilon;

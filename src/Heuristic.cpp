@@ -82,12 +82,12 @@ void Heuristic::sendAnts() {
 /**
  * Updates the pheromones in the heuristic graph.
  */
-void updatePheromones() {
+void Heuristic::updatePheromones() {
     int numEdges, i, j, wID, tID;
-    double cost, capacity, newPheromone, workerCapacity;
-    bool isFeasible;
+    double cost, bestCost, capacity, newPheromone, workerCapacity;
     std::vector<std::pair<int, int>> edges;
     std::pair<int, int> edge;
+    bool isFeasible = true;
 
     // First we evaporate all of the edges in the
     // heuristic graph.
@@ -147,7 +147,7 @@ void updatePheromones() {
 /**
  * Returns the ants to the colony.
  */
-void returnAnts() {
+void Heuristic::returnAnts() {
     for (int i = 0; i < numAnts; i++)
         ants[i].sendToColony();
 }
