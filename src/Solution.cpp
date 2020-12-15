@@ -15,6 +15,14 @@ Solution::Solution(std::vector<std::pair<int, int>> edges) {
 }
 
 /**
+ * Returns the edges of the solution.
+ * @return The edges of the solution.
+ */
+std::vector<std::pair<int, int>> getEdges() {
+    return this->edges;
+}
+
+/**
  * Returns the capacity of the solution.
  * @return The capacity of the solution.
  */

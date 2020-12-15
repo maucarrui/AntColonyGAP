@@ -11,6 +11,7 @@ class Solution {
     public:
         Solution(std::vector<std::pair<int, int>> edges);
 
+        std::vector<std::pair<int, int>> getEdges();
         double  getCapacity();
         double  getCost();
         bool    getFeasibility();
