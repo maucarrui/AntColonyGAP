@@ -54,6 +54,16 @@ int Graph::getNumEdges() {
 }
 
 /**
+ * Builds the search table of workers.
+ */
+void Graph::buildSearchTable() {
+    for (int i = 0; i < numWokers; i++) {
+        Worker w = workers[i];
+	searchTableWorkers[w.getID()] = w;
+    }
+}
+
+/**
  * Builds the capacity table.
  */
 void Graph::buildCapacityTable() {
@@ -107,6 +117,14 @@ double Graph::getCostOf(int i, int j) {
     return costTable[i-1][j-1];
 }
 
+/**
+ * Returns the worker's capacity.
+ * @param wID The worker's ID.
+ * @return The worker's capacity.
+ */
+double Graph::getCapacityOfWorker(int wID) {
+    return searchTableWorkers[wID].getCapacity();
+}
 /**
  * Calculates the capacity of a set of edges.
  * @return The capacity of the set of edges.

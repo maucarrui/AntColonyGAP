@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <unordered_map>
 
 #ifndef WORKER_H
 #define WORKER_H
@@ -35,6 +36,9 @@ class Graph {
 	std::vector<std::vector<double>> capacityTable;
 	std::vector<std::vector<double>> costTable;
 
+        std::unordered_map<Worker> searchTableWorkers;
+
+        void buildSearchTable();
         void buildCapacityTable();
         void buildCostTable();
     
@@ -49,6 +53,8 @@ class Graph {
 	
 	double getCapacityOf(int i, int j);
 	double getCostOf(int i, int j);
+
+        double getCapacityOfWorker(int wID);
 
         double calculateCapacity(std::vector<std::pair<int, int>> edges);
         double calculateCost(std::vector<std::pair<int, int>> edges);
