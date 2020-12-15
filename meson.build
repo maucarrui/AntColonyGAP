@@ -5,11 +5,14 @@ add_global_arguments('-DSOME_TOKEN=value', language: 'cpp')
 dependencies= [dependency('sqlite3'),
 	       dependency('gtest')]
 
-src = ['src/Task.cpp',
-       'src/Worker.cpp',
+src = ['src/Ant.cpp',
        'src/DAO.cpp',
        'src/Graph.cpp',
+       'src/Heuristic.cpp',
+       'src/HeuristicGraph.cpp',
        'src/Solution.cpp',
+       'src/Task.cpp',
+       'src/Worker.cpp',
        'src/main.cpp']
 
 incdir = include_directories('src')
