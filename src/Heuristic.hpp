@@ -1,5 +1,6 @@
-#include <vector>
+#include <list>
 #include <random>
+#include <string>
 
 #ifndef ANT_H
 #define ANT_H
@@ -32,9 +33,13 @@ class Heuristic {
         double evaporation;
         double epsilon;
 
-        std::vector<Ant> ants;
+        std::list<Ant> ants;
 
         Solution bestSolution;
+
+        void sendAnts();
+        void updatePheromones();
+        void returnAnts();
 
     public:
         Heuristic(const Graph &G,
@@ -46,7 +51,6 @@ class Heuristic {
 		  int maxTries);
 
         void antColonyOptimization();
-        void sendAnts();
-        void updatePheromones();
-        void returnAnts();
+
+        std::string printBestSolution();
 };

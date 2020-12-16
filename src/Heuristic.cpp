@@ -1,4 +1,5 @@
 #include "Heuristic.hpp"
+#include <iostream>
 
 /**
  * Constructor for the Ant Colony Optimization (ACO)
@@ -26,7 +27,7 @@ Heuristic::Heuristic(const Graph &G,
     this->maxTries    = maxTries;
 
     for (int i = 0; i < numAnts; i++)
-        this->ants.push_back(Ant());
+        ants.push_back(Ant());
 }
 
 /**
@@ -46,14 +47,16 @@ void Heuristic::antColonyOptimization() {
  * Sends the ants to find a solution.
  */
 void Heuristic::sendAnts() {
-    int i, j, k;
+    int j, k;
     int numWorkers = G.getNumWorkers();
     int numTasks   = G.getNumTasks();
 
     double r, edgeProb, accProb, accPheromone, pheromone;
 
-    for (i = 0; i < numAnts; i++) {
-        Ant ant = ants[i];
+    std::list<Ant>::iterator it;
+
+    for (it = ants.begin(); it != ants.end(); ++it) {
+        Ant &ant = *it;
 	
 	// For each task the ant decides which
 	// is the best worker to be assigned
@@ -83,11 +86,13 @@ void Heuristic::sendAnts() {
  * Updates the pheromones in the heuristic graph.
  */
 void Heuristic::updatePheromones() {
-    int numEdges, i, j, wID, tID;
+    int numEdges, j, wID, tID;
     double cost, bestCost, capacity, newPheromone, workerCapacity;
     std::vector<std::pair<int, int>> edges;
     std::pair<int, int> edge;
     bool isFeasible = true;
+
+    std::list<Ant>::iterator it;
 
     // First we evaporate all of the edges in the
     // heuristic graph.
@@ -104,15 +109,14 @@ void Heuristic::updatePheromones() {
     // Then we update the pheromones of edges where
     // ants travelled, checking if there is someone 
     // to penalize.
-    numEdges = ants[0].getSolution().getEdges().size();
+    numEdges = numWorkers;
 
-    for (i = 0; i < numAnts; i++) {
-        Solution s = ants[i].getSolution();
-	edges = s.getEdges();
-	cost  = G.calculateCost(edges);
+    for (it = ants.begin(); it != ants.end(); it++) {
+	edges      = it->getEdges();
+	cost       = G.calculateCost(edges);
+	isFeasible = true;
 	
 	for (j = 0; j < numEdges; j++) {
-	    isFeasible = true;
 	    wID = edges[j].first;
 	    tID = edges[j].second;
 	    
@@ -130,14 +134,16 @@ void Heuristic::updatePheromones() {
 	        newPheromone *= 0.2;
 	    }
 
-	    H.setPheromone(wID, tID, newPheromone);
+	    H.setPheromone(wID - 1, tID - 1, newPheromone);
 	}
+
 
         // Update best solution if there is a better one.
 	bestCost = bestSolution.getCost();
-	if (isFeasible && (cost < bestCost)) {
-	    bestSolution = s;
-	    s.setCost(cost);
+	if (bestSolution.getCost() == 0 || cost < bestCost) {
+	    bestSolution = it->getSolution();
+	    bestSolution.setCost(cost);
+	    bestSolution.setFeasibility(isFeasible);
 	}
     }
 
@@ -148,6 +154,15 @@ void Heuristic::updatePheromones() {
  * Returns the ants to the colony.
  */
 void Heuristic::returnAnts() {
-    for (int i = 0; i < numAnts; i++)
-        ants[i].sendToColony();
+    std::list<Ant>::iterator it;
+    for (it = ants.begin(); it != ants.end(); it++)
+        it->sendToColony();
+}
+
+/**
+ * Returns a string representation of the best solution.
+ * @return A string representation of the best solution.
+ */
+std::string Heuristic::printBestSolution() {
+    return this->bestSolution.toString();
 }
