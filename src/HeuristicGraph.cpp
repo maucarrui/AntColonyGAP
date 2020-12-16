@@ -12,7 +12,7 @@ HeuristicGraph::HeuristicGraph(int numWorkers, int numTasks) {
     this->numWorkers = numWorkers;
     this->numTasks   = numTasks;
 
-    this->bipartite.resize(numWorkers, std::vector<double>(numWorkers));
+    this->bipartite.resize(numWorkers, std::vector<double>(numTasks));
     this->accumulatedPheromones.resize(numTasks);
 
     setInitialPheromones();
