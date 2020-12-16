@@ -27,6 +27,7 @@ Graph::Graph(const std::vector<Worker> &workers,
 
     buildCapacityTable();
     buildCostTable();
+    buildSearchTable();
 }
 
 /**
@@ -164,41 +165,4 @@ double Graph::calculateCost(std::vector<std::pair<int, int>> edges) const {
     }
 
     return total;
-}
-
-/**
- * Returns an initial solution given the current set 
- * of workers and tasks.
- * @return An initial solution.
- */
-Solution Graph::getInitialSolution() {
-    std::vector<std::pair<int, int>> edges;
-    int i, r, wID, tID;
-
-    for (i = 0; i < numTasks; i++) {
-        // Select a task.
-        Task t = tasks[i];
-	
-	// Select a random worker;
-	r = rand() % numWorkers;
-	Worker w = workers[r];
-	
-	// Assign the worker to the task.
-	wID = w.getID();
-	tID = t.getID();
-
-	edges.push_back(std::make_pair(wID, tID));
-    }
-
-    // Create a solution
-    Solution s = Solution(edges);
-
-    // Calculate its capacity and cost.
-    double capacity = calculateCapacity(edges);
-    double cost     = calculateCost(edges);
-
-    s.setCapacity(capacity);
-    s.setCost(cost);
-
-    return s;
 }

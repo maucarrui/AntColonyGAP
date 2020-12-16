@@ -58,6 +58,4 @@ class Graph {
 
         double calculateCapacity(std::vector<std::pair<int, int>> edges) const;
         double calculateCost(std::vector<std::pair<int, int>> edges) const;
-
-        Solution getInitialSolution();
 };
