@@ -10,7 +10,16 @@ Ant::Ant() {}
  * @param edge The explored edge.
  */
 void Ant::addEdge(std::pair<int, int> edge) {
+    int wID, tID;
+    wID = edge.first;
+    tID = edge.second;
+
     travelledEdges.push_back(edge);
+    solution.addAssignment(wID, tID);
+}
+
+std::vector<std::pair<int, int>> Ant::getEdges() {
+    return this->travelledEdges;
 }
 
 /**
@@ -19,6 +28,7 @@ void Ant::addEdge(std::pair<int, int> edge) {
  */
 void Ant::sendToColony() {
     travelledEdges.clear();
+    solution.clear();
 }
 
 /**
@@ -26,5 +36,5 @@ void Ant::sendToColony() {
  * @return The solution found by the ant.
  */
 Solution Ant::getSolution() {
-    return Solution(travelledEdges);
+    return solution;
 }
