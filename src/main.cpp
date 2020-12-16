@@ -1,5 +1,11 @@
 #include <iostream>
 #include <string>
+#include <list>
+
+#ifndef ANT_H
+#define ANT_H
+#include "Ant.hpp"
+#endif
 
 #ifndef DAO_H
 #define DAO_H
@@ -91,16 +97,18 @@ int main(int argc, char** argv) {
 
     // Close DB connection.
     dao.closeDB();
-
+    
     // Build the heuristic graph.
-    HeuristicGraph H = HeuristicGraph(workers.size(), tasks.size());
+    int numWorkers = workers.size();
+    int numTasks   = tasks.size();
+    HeuristicGraph H = HeuristicGraph(numWorkers, numTasks);
 
     // Defining the heuristic.
     double Q           = 1;
     int numAnts        = 20;
     double evaporation = 0.2;
     double epsilon     = 0.0010;
-    int maxTries       = 1;
+    int maxTries       = 50;
 
     Heuristic heuristic = Heuristic(G,
 				    H,
@@ -111,4 +119,7 @@ int main(int argc, char** argv) {
 				    maxTries);
     
     heuristic.antColonyOptimization();
+
+    std::string bestSolution = heuristic.printBestSolution();
+    std::cout << bestSolution << std::endl;
 }
