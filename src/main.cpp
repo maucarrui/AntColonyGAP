@@ -105,17 +105,19 @@ int main(int argc, char** argv) {
 
     // Defining the heuristic.
     double Q           = 1;
-    int numAnts        = 20;
-    double evaporation = 0.2;
-    double epsilon     = 0.0010;
-    int maxTries       = 50;
+    int numAnts        = 40;
+    double evaporation = 0.010;
+    int alpha          = 1;
+    int beta           = 50;
+    int maxTries       = 1;
 
     Heuristic heuristic = Heuristic(G,
 				    H,
 				    Q,
 				    numAnts,
 				    evaporation,
-				    epsilon,
+				    alpha,
+				    beta,
 				    maxTries);
     
     heuristic.antColonyOptimization();
