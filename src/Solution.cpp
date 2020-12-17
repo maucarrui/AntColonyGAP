@@ -8,7 +8,8 @@
  * @param edges The edges of the bipartite graph.
  */
 Solution::Solution() {
-    this->cost = 0;
+    this->cost       = 0;
+    this->capacity   = 0;
     this->isFeasible = false;
 }
 
@@ -88,6 +89,7 @@ void Solution::setFeasibility(bool status) {
  */
 void Solution::clear() {
     this->cost       = 0;
+    this->capacity   = 0;
     this->isFeasible = false;
     this->assignments.clear();
 }
@@ -102,6 +104,7 @@ std::string Solution::toString() {
     int numTasks;
 
     s  = "Cost: " + std::to_string(cost) + "\n";
+    s += "Capacity: " + std::to_string(capacity) + "\n";
     s += "Feasible: ";
 
     if (isFeasible)
