@@ -1,6 +1,7 @@
 #include <list>
 #include <random>
 #include <string>
+#include <math.h>
 
 #ifndef ANT_H
 #define ANT_H
@@ -31,7 +32,8 @@ class Heuristic {
         int maxTries;
         double Q;
         double evaporation;
-        double epsilon;
+        int alpha;
+        int beta;
 
         std::list<Ant> ants;
 
@@ -47,7 +49,8 @@ class Heuristic {
 		  double Q,
 		  int numAnts,
 		  double evaporation,
-		  double epsilon,
+		  int alpha,
+		  int beta,
 		  int maxTries);
 
         void antColonyOptimization();
