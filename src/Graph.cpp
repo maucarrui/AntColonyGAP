@@ -166,3 +166,111 @@ double Graph::calculateCost(std::vector<std::pair<int, int>> edges) const {
 
     return total;
 }
+
+
+/**
+ * Returns whether or not a worker is capable of doing a task.
+ * @param wID The worker's ID.
+ * @param tID The task's ID.
+ * @return True if the worker is capable, false otherwise.
+ */
+bool Graph::checkIfCapable(int wID, int tID) const {
+    double capacity  = getCapacityOf(wID, tID);
+    double wCapacity = getCapacityOfWorker(wID);
+    
+    return (capacity <= wCapacity);
+}
+
+/**
+ * Checks whether or not a set of edges its feasable or not.
+ * @param  edges The set of edges.
+ * @return If the set is not feasible then it returns a list
+ *         containing the edges that cause the solution 
+ *         to not be feasable and its contribution to it, 
+ *         otherwise it returns an empty vector.
+ */
+std::vector<std::pair<std::pair<int, int>, double>>
+Graph::checkFeasibility(std::vector<std::pair<int, int>> edges) const {
+
+    std::vector<std::pair<std::pair<int, int>, double>> res;
+
+    std::unordered_map<int, std::vector<int>> notFeasible;
+    std::unordered_map<int, std::vector<int>>::iterator it;
+
+    std::unordered_map<int, double> accumulated;
+
+    std::vector<int> e;
+
+    std::pair<std::pair<int, int>, double> data;
+    std::pair<int, int> edge;
+
+    double excess, total, capacityW, capacityT, contribution, penalization;
+
+    int i, j, k, wID, tID;
+    int numEdges = edges.size();
+
+    // Add tasks by worker.
+    for (i = 0; i < numEdges; i++) {
+        wID = edges[i].first;
+	tID = edges[i].second;
+
+	it = notFeasible.find(wID);
+	    
+	if (it == notFeasible.end()) {
+	    notFeasible[wID] = std::vector<int> { tID };
+	    accumulated[wID] = getCapacityOf(wID, tID);
+	} else {
+	    it->second.push_back(tID);
+	    accumulated[wID] += getCapacityOf(wID, tID);
+	}
+    }
+
+    // Keep only the workers who exceed its capacity.
+    std::vector<int> feasible;
+    for (it = notFeasible.begin(); it != notFeasible.end(); it++) {
+        wID = it->first;
+        e   = it->second;
+
+	capacityW = getCapacityOfWorker(wID);
+        total     = accumulated[wID];
+
+	if (total <= capacityW)
+	    feasible.push_back(wID);
+    }
+    
+    int m = feasible.size();
+    for (i = 0; i < m; i++) {
+        it = notFeasible.find(feasible[i]);
+        notFeasible.erase(it);
+    }
+
+    // Get the penalization for each unfeasible edge.
+    for (it = notFeasible.begin(); it != notFeasible.end(); it++) {
+        wID = it->first;
+        e   = it->second;
+
+	k = e.size();
+
+	capacityW = getCapacityOfWorker(wID);
+        total     = accumulated[wID];
+	excess    = capacityW / total;
+
+	for (j = 0; j < k; j++) {
+	    tID          = e[j];
+	    capacityT    = getCapacityOf(wID, tID);
+	    contribution = capacityT / total;
+
+	    if (contribution == 1)
+	        penalization = 1;
+	    else
+                penalization = excess * contribution;
+
+	    edge = std::make_pair(wID, tID);
+	    data = std::make_pair(edge, penalization);
+	    
+	    res.push_back(data);
+	}
+    }
+
+    return res;
+}

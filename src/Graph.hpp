@@ -58,4 +58,9 @@ class Graph {
 
         double calculateCapacity(std::vector<std::pair<int, int>> edges) const;
         double calculateCost(std::vector<std::pair<int, int>> edges) const;
+
+        bool checkIfCapable(int wID, int tID) const;
+
+        std::vector<std::pair<std::pair<int, int>, double>>
+	    checkFeasibility(std::vector<std::pair<int, int>> edges) const;
 };
