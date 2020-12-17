@@ -97,27 +97,25 @@ int main(int argc, char** argv) {
 
     // Close DB connection.
     dao.closeDB();
+
+    // Defining the heuristic.
+    double Q           = 100;
+    int numAnts        = 20;
+    double evaporation = 0.1;
+    int alpha          = 1;
+    int beta           = 1;
+    int maxTries       = 100;
     
     // Build the heuristic graph.
     int numWorkers = workers.size();
     int numTasks   = tasks.size();
-    HeuristicGraph H = HeuristicGraph(numWorkers, numTasks);
-
-    // Defining the heuristic.
-    double Q           = 1;
-    int numAnts        = 40;
-    double evaporation = 0.010;
-    int alpha          = 1;
-    int beta           = 50;
-    int maxTries       = 1;
+    HeuristicGraph H = HeuristicGraph(numWorkers, numTasks, G, alpha, beta);
 
     Heuristic heuristic = Heuristic(G,
 				    H,
 				    Q,
 				    numAnts,
 				    evaporation,
-				    alpha,
-				    beta,
 				    maxTries);
     
     heuristic.antColonyOptimization();

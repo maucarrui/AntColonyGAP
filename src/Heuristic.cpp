@@ -17,15 +17,11 @@ Heuristic::Heuristic(const Graph &G,
 		     double Q,
 		     int numAnts,
 		     double evaporation,
-		     int alpha,
-		     int beta,
 		     int maxTries):
     G(G),
     H(H) {
     this->numAnts     = numAnts;
     this->evaporation = evaporation;
-    this->alpha       = alpha;
-    this->beta        = beta;
     this->maxTries    = maxTries;
     this->Q           = Q;
 
@@ -54,12 +50,16 @@ void Heuristic::sendAnts() {
     int numWorkers = G.getNumWorkers();
     int numTasks   = G.getNumTasks();
 
-    double r, edgeProb, accProb, accPheromone, pheromone, cost, accCost, acc;
+    double r, edgeProb, accProb;
+    
+    bool foundFood;
 
     std::list<Ant>::iterator it;
+    std::vector<std::pair<int, int>> currentSolution;
 
+    int a = 0;
     for (it = ants.begin(); it != ants.end(); ++it) {
-        Ant &ant = *it;
+        Ant &ant  = *it;
 	
 	// For each task the ant decides which
 	// is the best worker to be assigned
@@ -68,20 +68,15 @@ void Heuristic::sendAnts() {
 	for (j = 0; j < numTasks; j++) {
 	    accProb      = 0;
 	    r            = ((double) rand() / (RAND_MAX));
-	    accPheromone = H.getAccumulated(j);
-	    accCost      = 0;
-	    acc          = 0;
+	    foundFood    = false;
 
 	    for (k = 0; k < numWorkers; k++) {
-	        pheromone = pow(H.getPheromone(k, j), alpha);
-		cost      = pow((1 / G.getCostOf(k+1, j+1)), beta);
-		acc      += pheromone;
-	    }
+                currentSolution = ant.getEdges();
 
-	    for (k = 0; k < numWorkers; k++) {
-	        pheromone = pow(H.getPheromone(k, j), alpha);
-		cost      = pow((1 / G.getCostOf(k+1, j+1)), beta);
-		edgeProb  = ((pheromone) / acc);
+		edgeProb = H.getProbability(k, j, currentSolution);
+		
+		if (edgeProb != 0)
+                    foundFood = true;
 		
 		accProb += edgeProb;
 		
@@ -90,11 +85,16 @@ void Heuristic::sendAnts() {
 		    break;
 		}
 	    }
-	}
-    }
 
-    //std::cout << H.showPheromones(1) << std::endl;
-    //std::cout << H.showDistribution(0) << std::endl;
+	    if (!foundFood)
+	        break;
+	}
+
+	if (foundFood)
+	    ant.gotFood();
+
+	a++;
+    }
 }
 
 /**
@@ -110,7 +110,7 @@ void Heuristic::updatePheromones() {
     std::vector<std::pair<std::pair<int, int>, double>> p;
     double penalization;
 
-    std::list<Ant>::iterator it;
+    std::list<Ant>::iterator ant;
 
     // First we evaporate all of the edges in the
     // heuristic graph.
@@ -129,49 +129,52 @@ void Heuristic::updatePheromones() {
     // to penalize.
     numEdges = numWorkers;
 
-    for (it = ants.begin(); it != ants.end(); it++) {
-	edges      = it->getEdges();
-	cost       = G.calculateCost(edges);
-	isFeasible = true;
+    for (ant = ants.begin(); ant != ants.end(); ant++) {
+        if (ant->didFoundFood()) {
+	    edges      = ant->getEdges();
+	    cost       = G.calculateCost(edges);
+	    isFeasible = true;
 
-	for (j = 0; j < numEdges; j++) {
-	    wID = edges[j].first;
-	    tID = edges[j].second;
-	    
-	    // Update.
-	    newPheromone = H.getPheromone(wID - 1, tID - 1) + (Q / cost);
-
-	    H.setPheromone(wID - 1, tID - 1, newPheromone);
-	}
-
-	// Penalization time.
-	p = G.checkFeasibility(edges);
-
-	if (!p.empty()) {
-	    isFeasible = false;
-	    numEdges   = p.size();
-	    
 	    for (j = 0; j < numEdges; j++) {
-	        wID          = p[j].first.first;
-		tID          = p[j].first.second;
-		penalization = p[j].second;
-
-		newPheromone  = H.getPheromone(wID - 1, tID - 1);
-		newPheromone *= (1 - penalization);
+	        wID = edges[j].first;
+	        tID = edges[j].second;
+	    
+		// Update.
+		newPheromone = H.getPheromone(wID - 1, tID - 1) + (Q / cost);
 
 		H.setPheromone(wID - 1, tID - 1, newPheromone);
 	    }
-	}
 
-        // Update best solution if there is a better one.
-	bestCost = bestSolution.getCost();
-	if (bestSolution.getCost() == 0 || cost < bestCost) {
-            capacity     = G.calculateCapacity(edges);
+	    /*
+	    // Penalization time.
+	    p = G.checkFeasibility(edges);
+	    
+	    if (!p.empty()) {
+	        isFeasible = false;
+		numEdges   = p.size();
+	    
+		for (j = 0; j < numEdges; j++) {
+	            wID          = p[j].first.first;
+		    tID          = p[j].first.second;
+		    penalization = p[j].second;
 
-	    bestSolution = it->getSolution();
-	    bestSolution.setCost(cost);
-	    bestSolution.setCapacity(capacity);
-	    bestSolution.setFeasibility(isFeasible);
+		    newPheromone  = H.getPheromone(wID - 1, tID - 1);
+		    newPheromone *= (1 - penalization);
+
+		    H.setPheromone(wID - 1, tID - 1, newPheromone);
+		}
+	    }
+	    */
+
+	    // Update best solution if there is a better one.
+	    bestCost = bestSolution.getCost();
+	    if (bestSolution.getCost() == 0 || cost < bestCost) {
+                capacity     = G.calculateCapacity(edges);
+		bestSolution = ant->getSolution();
+		bestSolution.setCost(cost);
+		bestSolution.setCapacity(capacity);
+		bestSolution.setFeasibility(isFeasible);
+	    }
 	}
     }
 

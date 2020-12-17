@@ -32,8 +32,6 @@ class Heuristic {
         int maxTries;
         double Q;
         double evaporation;
-        int alpha;
-        int beta;
 
         std::list<Ant> ants;
 
@@ -49,8 +47,6 @@ class Heuristic {
 		  double Q,
 		  int numAnts,
 		  double evaporation,
-		  int alpha,
-		  int beta,
 		  int maxTries);
 
         void antColonyOptimization();
