@@ -8,12 +8,17 @@
  * @param numWorkers The number of workers in the bipartite graph.
  * @param numTasks   The number of tasks in the bipartite graph.
  */
-HeuristicGraph::HeuristicGraph(int numWorkers, int numTasks) {
+HeuristicGraph::HeuristicGraph(int numWorkers, int numTasks, 
+			       const Graph &G, int alpha, int beta):
+    G(G) {
     this->numWorkers = numWorkers;
     this->numTasks   = numTasks;
+    this->alpha      = alpha;
+    this->beta       = beta;
 
     this->bipartite.resize(numWorkers, std::vector<double>(numTasks));
     this->accumulatedPheromones.resize(numTasks);
+    this->accumulatedTotal.resize(numTasks);
 
     setInitialPheromones();
 }
@@ -25,14 +30,18 @@ HeuristicGraph::HeuristicGraph(int numWorkers, int numTasks) {
  */
 void HeuristicGraph::setInitialPheromones() {
     int i, j;
-    double pheromone;
+    double pheromone, heuristic;
 
     // For each edge adjecent to a Task.
     for (i = 0; i < numTasks; i++) {
 	pheromone = 1;
 	
-	for (j = 0; j < numWorkers; j++)
-	    bipartite[j][i] = pheromone;
+	for (j = 0; j < numWorkers; j++) {
+	    heuristic = 1 / G.getCapacityOf(j+1, i+1);
+
+	    bipartite[j][i]      = pheromone;
+	    accumulatedTotal[i] += pow(heuristic, beta); 
+	}
 
 	accumulatedPheromones[i] = numWorkers;
     }
@@ -58,6 +67,31 @@ double HeuristicGraph::getAccumulated(int tID) const {
 }
 
 /**
+ * Returns the probability of using this edge.
+ * @return The probability of using this edge.
+ */
+double HeuristicGraph::getProbability(int wID, 
+				      int tID, 
+				      std::vector<std::pair<int, int>> edges) const {
+    double pheromone, heuristic, acc;
+    std::vector<std::pair<int, int>> current;
+
+    current = edges;
+    current.push_back(std::make_pair(wID + 1, tID + 1));
+
+    // If the solution is not feasible anymore.
+    if (!G.checkFeasibility(current))
+        return 0;
+
+    pheromone = pow(bipartite[wID][tID], alpha);
+    heuristic = pow((1 / G.getCapacityOf(wID + 1, tID + 1)), beta);
+    
+    acc = accumulatedTotal[tID];
+
+    return (pheromone * heuristic) / acc;
+}
+
+/**
  * Set the pheromone value of the edge (i, j) in the bipartite.
  * @param i         The worker's ID.
  * @param j         The task's ID.
@@ -72,15 +106,23 @@ void HeuristicGraph::setPheromone(int i, int j, double pheromone) const {
  */
 void HeuristicGraph::updateAccumulated() const {
     int i, j;
-    double total;
+    double totalPheromones;
+    double total, heuristic, pheromone;
 
     for (i = 0; i < numTasks; i++) {
-        total = 0;
+        totalPheromones = 0;
+	total = 0;
 
-	for (j = 0; j < numWorkers; j++)
-	    total += bipartite[j][i];
+	for (j = 0; j < numWorkers; j++) {
+	    heuristic = (1 / G.getCapacityOf(j+1, i+1));
+	    pheromone = bipartite[j][i];
+
+	    totalPheromones += bipartite[j][i];
+	    total           += pow(pheromone, alpha) * pow(heuristic, beta);
+	}
 	
-	accumulatedPheromones[i] = total;
+	accumulatedPheromones[i] = totalPheromones;
+	accumulatedTotal[i]      = total;
     }
 }
 
@@ -91,17 +133,35 @@ void HeuristicGraph::updateAccumulated() const {
  * @param tID The task's ID.
  * @return A string representation of the distribution.
  */
-std::string HeuristicGraph::showDistribution(int tID) const {
+std::string 
+HeuristicGraph::showDistribution(int tID,
+				 std::vector<std::pair<int, int>> edges) const {
     std::string s;
     int i;
-    double pheromone, prob;
+    double prob;
+    
+    int numEdges = edges.size();
 
-    double acc = accumulatedPheromones[tID];
-    s = "Distribución de la tarea " + std::to_string(tID + 1) + "\n";
+    s  = "Distribución de la tarea " + std::to_string(tID + 1) + "\n";
+
+    s += "Dada la secuencia: {";
+    if (!edges.empty()) {
+        for (i = 0; i < numEdges; i++) {
+            if (i == numEdges - 1) {
+	        s += " (" + std::to_string(edges[i].first) + ", ";
+		s += std::to_string(edges[i].second) + ") }\n";
+	    }
+	    else {
+	        s += "(" + std::to_string(edges[i].first) + ", ";
+	        s += std::to_string(edges[i].second) + ") ,";
+	    }
+	}
+    } else {
+        s += "}\n";
+    }
 
     for (i = 0; i < numWorkers; i++) {
-        pheromone = bipartite[i][tID];
-	prob      = (pheromone / acc);
+	prob      = getProbability(i, tID, edges);
         
         s += "  W" + std::to_string(i + 1) + ": ";
 	s += std::to_string(prob) + "\n";
@@ -127,6 +187,50 @@ std::string HeuristicGraph::showPheromones(int tID) const {
         
         s += "  W" + std::to_string(i + 1) + ": ";
 	s += std::to_string(pheromone) + "\n";
+    }
+
+    return s;
+}
+
+/**
+ * Returns a string representation of the cost of a task. 
+ * @param tID The task's ID.
+ * @return A string representation of the distribution.
+ */
+std::string HeuristicGraph::showCosts(int tID) const {
+    std::string s;
+    int i;
+    double cost;
+
+    s = "Costos de la tarea " + std::to_string(tID + 1) + "\n";
+
+    for (i = 0; i < numWorkers; i++) {
+        cost = G.getCostOf(i + 1, tID + 1);
+        
+        s += "  W" + std::to_string(i + 1) + ": ";
+	s += std::to_string(cost) + "\n";
+    }
+
+    return s;
+}
+
+/**
+ * Returns a string representation of the capacity of a task. 
+ * @param tID The task's ID.
+ * @return A string representation of the distribution.
+ */
+std::string HeuristicGraph::showCapacities(int tID) const {
+    std::string s;
+    int i;
+    double capacity;
+
+    s = "Capacidad de la tarea " + std::to_string(tID + 1) + "\n";
+
+    for (i = 0; i < numWorkers; i++) {
+        capacity = G.getCapacityOf(i + 1, tID + 1);
+        
+        s += "  W" + std::to_string(i + 1) + ": ";
+	s += std::to_string(capacity) + "\n";
     }
 
     return s;
