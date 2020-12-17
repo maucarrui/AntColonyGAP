@@ -83,3 +83,51 @@ void HeuristicGraph::updateAccumulated() const {
 	accumulatedPheromones[i] = total;
     }
 }
+
+/**
+ * Returns a string representation of the distribution
+ * of a task. The distribution of a task consists in the 
+ * probabilities to choose a worker's edge.
+ * @param tID The task's ID.
+ * @return A string representation of the distribution.
+ */
+std::string HeuristicGraph::showDistribution(int tID) const {
+    std::string s;
+    int i;
+    double pheromone, prob;
+
+    double acc = accumulatedPheromones[tID];
+    s = "Distribución de la tarea " + std::to_string(tID + 1) + "\n";
+
+    for (i = 0; i < numWorkers; i++) {
+        pheromone = bipartite[i][tID];
+	prob      = (pheromone / acc);
+        
+        s += "  W" + std::to_string(i + 1) + ": ";
+	s += std::to_string(prob) + "\n";
+    }
+
+    return s;
+}
+
+/**
+ * Returns a string representation of the pheromones of a task. 
+ * @param tID The task's ID.
+ * @return A string representation of the distribution.
+ */
+std::string HeuristicGraph::showPheromones(int tID) const {
+    std::string s;
+    int i;
+    double pheromone;
+
+    s = "Feromonas de la tarea " + std::to_string(tID + 1) + "\n";
+
+    for (i = 0; i < numWorkers; i++) {
+        pheromone = bipartite[i][tID];
+        
+        s += "  W" + std::to_string(i + 1) + ": ";
+	s += std::to_string(pheromone) + "\n";
+    }
+
+    return s;
+}

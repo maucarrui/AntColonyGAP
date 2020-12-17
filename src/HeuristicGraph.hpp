@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 
 class HeuristicGraph {
     private:
@@ -18,4 +19,7 @@ class HeuristicGraph {
 
         void setPheromone(int wID, int tID, double pheromone) const;
         void updateAccumulated() const;
+
+        std::string showDistribution(int tID) const;
+        std::string showPheromones(int tID) const;
 };
