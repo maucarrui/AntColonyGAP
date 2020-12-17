@@ -73,7 +73,13 @@ void Heuristic::sendAnts() {
 	    for (k = 0; k < numWorkers; k++) {
                 currentSolution = ant.getEdges();
 
-		edgeProb = H.getProbability(k, j, currentSolution);
+		currentSolution.push_back(std::make_pair(k + 1, j + 1));
+
+		edgeProb = H.getProbability(k, j);
+
+		// If the solution is not feasible anymore.
+		if (!G.checkFeasibility(currentSolution))
+		    edgeProb *= 0;
 		
 		if (edgeProb != 0)
                     foundFood = true;

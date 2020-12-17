@@ -28,15 +28,12 @@ class HeuristicGraph {
 
         double getPheromone(int wID, int tID) const;
         double getAccumulated(int tID) const;
-        double getProbability(int wID, 
-			      int tID, 
-			      std::vector<std::pair<int, int>> edges) const;
+        double getProbability(int wID, int tID) const;
 
         void setPheromone(int wID, int tID, double pheromone) const;
         void updateAccumulated() const;
 
-        std::string showDistribution(int tID, 
-				     std::vector<std::pair<int, int>> edges) const;
+        std::string showDistribution(int tID) const;
         std::string showPheromones(int tID) const;
         std::string showCosts(int tID) const;
         std::string showCapacities(int tID) const;

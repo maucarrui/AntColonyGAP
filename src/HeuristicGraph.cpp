@@ -70,18 +70,8 @@ double HeuristicGraph::getAccumulated(int tID) const {
  * Returns the probability of using this edge.
  * @return The probability of using this edge.
  */
-double HeuristicGraph::getProbability(int wID, 
-				      int tID, 
-				      std::vector<std::pair<int, int>> edges) const {
+double HeuristicGraph::getProbability(int wID, int tID) const {
     double pheromone, heuristic, acc;
-    std::vector<std::pair<int, int>> current;
-
-    current = edges;
-    current.push_back(std::make_pair(wID + 1, tID + 1));
-
-    // If the solution is not feasible anymore.
-    if (!G.checkFeasibility(current))
-        return 0;
 
     pheromone = pow(bipartite[wID][tID], alpha);
     heuristic = pow((1 / G.getCapacityOf(wID + 1, tID + 1)), beta);
@@ -134,34 +124,15 @@ void HeuristicGraph::updateAccumulated() const {
  * @return A string representation of the distribution.
  */
 std::string 
-HeuristicGraph::showDistribution(int tID,
-				 std::vector<std::pair<int, int>> edges) const {
+HeuristicGraph::showDistribution(int tID) const {
     std::string s;
     int i;
     double prob;
-    
-    int numEdges = edges.size();
-
+   
     s  = "Distribución de la tarea " + std::to_string(tID + 1) + "\n";
 
-    s += "Dada la secuencia: {";
-    if (!edges.empty()) {
-        for (i = 0; i < numEdges; i++) {
-            if (i == numEdges - 1) {
-	        s += " (" + std::to_string(edges[i].first) + ", ";
-		s += std::to_string(edges[i].second) + ") }\n";
-	    }
-	    else {
-	        s += "(" + std::to_string(edges[i].first) + ", ";
-	        s += std::to_string(edges[i].second) + ") ,";
-	    }
-	}
-    } else {
-        s += "}\n";
-    }
-
     for (i = 0; i < numWorkers; i++) {
-	prob      = getProbability(i, tID, edges);
+	prob      = getProbability(i, tID);
         
         s += "  W" + std::to_string(i + 1) + ": ";
 	s += std::to_string(prob) + "\n";

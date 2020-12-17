@@ -99,9 +99,9 @@ int main(int argc, char** argv) {
     dao.closeDB();
 
     // Defining the heuristic.
-    double Q           = 100;
+    double Q           = 1;
     int numAnts        = 20;
-    double evaporation = 0.1;
+    double evaporation = 0.2;
     int alpha          = 1;
     int beta           = 1;
     int maxTries       = 100;
