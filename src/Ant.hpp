@@ -10,11 +10,16 @@ class Ant {
         std::vector<std::pair<int, int>> travelledEdges;
         Solution solution;
 
+        bool foundFood;
+
     public:
         Ant();
 
         void addEdge(std::pair<int, int> edge);
-        std::vector<std::pair<int, int>> getEdges();
+        void gotFood();
         void sendToColony();
+
+        std::vector<std::pair<int, int>> getEdges();
         Solution getSolution();
+        bool didFoundFood();
 };

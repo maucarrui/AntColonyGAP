@@ -3,7 +3,9 @@
 /**
  * Default constructor for an ant.
  */
-Ant::Ant() {}
+Ant::Ant() {
+    this->foundFood = false;
+}
 
 /**
  * The ant explores an edge.
@@ -18,6 +20,21 @@ void Ant::addEdge(std::pair<int, int> edge) {
     solution.addAssignment(wID, tID);
 }
 
+/**
+ * The and found food.
+ */
+void Ant::gotFood() {
+    this->foundFood = true;
+}
+
+/**
+ * Returns true if the ant found food, false otherwise.
+ * @return True if the ant found food, false otherwise.
+ */
+bool Ant::didFoundFood() {
+    return this->foundFood;
+}
+
 std::vector<std::pair<int, int>> Ant::getEdges() {
     return this->travelledEdges;
 }
@@ -29,6 +46,7 @@ std::vector<std::pair<int, int>> Ant::getEdges() {
 void Ant::sendToColony() {
     travelledEdges.clear();
     solution.clear();
+    foundFood = false;
 }
 
 /**
