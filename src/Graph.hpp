@@ -61,6 +61,5 @@ class Graph {
 
         bool checkIfCapable(int wID, int tID) const;
 
-        std::vector<std::pair<std::pair<int, int>, double>>
-	    checkFeasibility(std::vector<std::pair<int, int>> edges) const;
+        bool checkFeasibility(std::vector<std::pair<int, int>> edges) const;
 };
