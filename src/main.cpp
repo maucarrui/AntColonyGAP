@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     double evaporation = 0.2;
     int alpha          = 1;
     int beta           = 1;
-    int maxTries       = 100;
+    int maxTries       = 1000;
     
     // Build the heuristic graph.
     int numWorkers = workers.size();

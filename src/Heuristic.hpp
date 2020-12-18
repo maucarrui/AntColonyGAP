@@ -33,6 +33,10 @@ class Heuristic {
         double Q;
         double evaporation;
 
+        double disipation;
+        double decayment;
+        double epsilon;
+
         std::list<Ant> ants;
 
         Solution bestSolution;
