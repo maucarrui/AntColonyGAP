@@ -47,9 +47,6 @@ std::string usage() {
     s += "Arguments: \n";
     s += "    <database.db>      The sqlite3 file containing all the information.\n";
     s += "    <randomSeed>       The seed for the RNG.\n";
-    s += "Options: \n";
-    s += "    --verbose          Prints a more detailed execution of the TSP.\n";
-    s += "    --onlycost         Prints only the cost of the best found solution.\n";
     
     return s;
 }
@@ -101,10 +98,10 @@ int main(int argc, char** argv) {
     // Defining the heuristic.
     double Q           = 1;
     int numAnts        = 20;
-    double evaporation = 0.2;
+    double evaporation = 0.010;
     int alpha          = 1;
     int beta           = 1;
-    int maxTries       = 1000;
+    int maxTries       = 5000;
     
     // Build the heuristic graph.
     int numWorkers = workers.size();
