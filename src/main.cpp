@@ -43,7 +43,7 @@
  */
 std::string usage() {
     std::string s = "";
-    s += "Usage: ./gap <datatabase.db> <randomSeed> [option] \n";
+    s += "Usage: ./gap <datatabase.db> <randomSeed> \n";
     s += "Arguments: \n";
     s += "    <database.db>      The sqlite3 file containing all the information.\n";
     s += "    <randomSeed>       The seed for the RNG.\n";
@@ -52,26 +52,10 @@ std::string usage() {
 }
 
 int main(int argc, char** argv) {
-    bool activeOption = false;
-    bool costOption   = false;
 
-    if (argc < 3 || argc > 4) {
+    if (argc != 3) {
         std::cout << usage() << std::endl;
 	return -1;
-    } else if (argc == 4) {
-        std::string option1 = "--verbose";
-	std::string option2 = "--onlycost";
-	
-	if (!option1.compare(argv[4]))
-	    activeOption = true;
-
-	else if (!option2.compare(argv[4]))
-	    costOption = true;
-
-	else {
-	    std::cout << usage() << std::endl;
-	    return -1;
-	}
     }
 
     // Get the path of the sql file and the RNG seed.
